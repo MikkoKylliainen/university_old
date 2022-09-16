@@ -17,7 +17,14 @@ namespace university
         }
         [HttpGet("{id}")]
         public string GetOneStudent(int id){
-            return "This will return id "+id;
+            Student objStudent = new Student();
+            string result = objStudent.GetOneStudent(id);
+
+            if (result.Length == 0) {
+                result = "Student not found.";
+            }
+            Console.WriteLine(result);
+            return result;
         }
         [HttpPost]
         public string AddStudent(){
