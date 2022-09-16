@@ -1,8 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
+using university.Models;
 
 namespace university
 {
@@ -12,7 +10,10 @@ namespace university
     {
         [HttpGet()]
         public string GetAllStudents(){
-            return "This will return all students.";
+            Student objStudent = new Student();
+            string result = objStudent.GetAllStudents();
+            Console.WriteLine(result);
+            return result;
         }
         [HttpGet("{id}")]
         public string GetOneStudent(int id){
