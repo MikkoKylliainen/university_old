@@ -22,4 +22,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+//example middleware
+
+app.Use(async (contex, next)=> {
+    Console.WriteLine("Middleware");
+    await next();
+}
+);
+
 app.Run();
