@@ -34,8 +34,7 @@ namespace university.Controllers
             Console.WriteLine(result);
             if (result is null)
                 return new NotFoundResult();
-            return new OkObjectResult(result);
-            
+            return new OkObjectResult(result);    
         }
 
         // POST api/Administrator
@@ -79,7 +78,6 @@ namespace university.Controllers
             await result.DeleteAsync();
             return new OkObjectResult(result);
         }
-
 
         public Database Db { get; }
     }

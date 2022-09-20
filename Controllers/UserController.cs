@@ -82,7 +82,6 @@ namespace university.Controllers
             return new OkObjectResult(result);
         }
 
-
         public Database Db { get; }
     }
 }

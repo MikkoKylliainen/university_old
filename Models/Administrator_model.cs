@@ -27,7 +27,6 @@ namespace university
             using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"SELECT * FROM  administrator ;";
             var result=await ReturnAllAsync(await cmd.ExecuteReaderAsync());
-           // Console.WriteLine(result);
             return await ReturnAllAsync(await cmd.ExecuteReaderAsync());
         }
 
@@ -43,13 +42,8 @@ namespace university
             });
             var result = await ReturnAllAsync(await cmd.ExecuteReaderAsync());
             Console.WriteLine(result.Count);
-            if(result.Count > 0){
-                return result[0];
-            }
-            else {
-                return null;
-            }
-            //return result.Count > 0 ? result[0] : null;
+
+            return result.Count > 0 ? result[0] : null;
         }
 
 
@@ -66,14 +60,14 @@ namespace university
         public async Task<int> InsertAsync()
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText=@"insert into administrator (idadministrator,category) 
+            cmd.CommandText=@"insert into administrator(idadministrator,category) 
             values(@idadministrator,@category);";
             BindParams(cmd);
+            BindId(cmd);
             try
             {
                 await cmd.ExecuteNonQueryAsync();
-                int lastInsertId = (int) cmd.LastInsertedId; 
-                return lastInsertId;
+                return idadministrator;
             }
             catch (System.Exception)
             {   
