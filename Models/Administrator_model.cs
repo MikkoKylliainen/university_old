@@ -31,7 +31,7 @@ namespace university
             return await ReturnAllAsync(await cmd.ExecuteReaderAsync());
         }
 
-        public async Task<User> FindOneAsync(int idadministrator)
+        public async Task<Administrator> FindOneAsync(int idadministrator)
         {
             using var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"SELECT * FROM  administrator  WHERE  idadministrator  = @idadministrator";
@@ -66,7 +66,7 @@ namespace university
         public async Task<int> InsertAsync()
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText=@"insert into user(idadministrator,category) 
+            cmd.CommandText=@"insert into administrator (idadministrator,category) 
             values(@idadministrator,@category);";
             BindParams(cmd);
             try
