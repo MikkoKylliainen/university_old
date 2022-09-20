@@ -6,44 +6,40 @@ using MySqlConnector;
 
 namespace university
 {
-    public class User
+    public class Administrator
     {
-        public int iduser { get; set; }
-        public string username { get; set; }
-        public string password { get; set; }
-        public int identity { get; set; }
-        public string firstname { get; set; }
-        public string lastname { get; set; }
+        public int idadministrator { get; set; }
+        public string category { get; set; }
 
         internal Database Db { get; set; }
 
-        public User()
+        public Administrator()
         {
         }
 
-        internal User(Database db)
+        internal Administrator(Database db)
         {
             Db = db;
         }
 
-        public async Task<List<User>> GetAllAsync()
+        public async Task<List<Administrator>> GetAllAsync()
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"SELECT * FROM  user ;";
+            cmd.CommandText = @"SELECT * FROM  administrator ;";
             var result=await ReturnAllAsync(await cmd.ExecuteReaderAsync());
            // Console.WriteLine(result);
             return await ReturnAllAsync(await cmd.ExecuteReaderAsync());
         }
 
-        public async Task<User> FindOneAsync(int iduser)
+        public async Task<User> FindOneAsync(int idadministrator)
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"SELECT * FROM  User  WHERE  iduser  = @iduser";
+            cmd.CommandText = @"SELECT * FROM  administrator  WHERE  idadministrator  = @idadministrator";
             cmd.Parameters.Add(new MySqlParameter
             {
-                ParameterName = "@iduser",
+                ParameterName = "@idadministrator",
                 DbType = DbType.Int32,
-                Value = iduser,
+                Value = idadministrator,
             });
             var result = await ReturnAllAsync(await cmd.ExecuteReaderAsync());
             Console.WriteLine(result.Count);
@@ -61,7 +57,7 @@ namespace university
         {
             using var txn = await Db.Connection.BeginTransactionAsync();
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"DELETE FROM  user ";
+            cmd.CommandText = @"DELETE FROM  administrator ";
             await cmd.ExecuteNonQueryAsync();
             await txn.CommitAsync();
         }
@@ -70,8 +66,8 @@ namespace university
         public async Task<int> InsertAsync()
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText=@"insert into user(username,password,identity,firstname,lastname) 
-            values(@username,@password,@identity,@firstname,@lastname);";
+            cmd.CommandText=@"insert into user(idadministrator,category) 
+            values(@idadministrator,@category);";
             BindParams(cmd);
             try
             {
@@ -88,7 +84,7 @@ namespace university
         public async Task UpdateAsync()
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"UPDATE  user  SET  username  = @username,  password  = @password, identity = @identity, firstname=@firstname, lastname=@lastname WHERE  iduser  = @iduser;";
+            cmd.CommandText = @"UPDATE  administrator  SET  idadministrator = @idadministrator,  category = @category WHERE  idadministrator  = @idadministrator;";
             BindParams(cmd);
             BindId(cmd);
             await cmd.ExecuteNonQueryAsync();
@@ -97,26 +93,22 @@ namespace university
         public async Task DeleteAsync()
         {
             using var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"DELETE FROM  user  WHERE  iduser  = @iduser;";
+            cmd.CommandText = @"DELETE FROM  administrator  WHERE  idadministrator  = @idadministrator;";
             BindId(cmd);
             await cmd.ExecuteNonQueryAsync();
         }
 
-        private async Task<List<User>> ReturnAllAsync(DbDataReader reader)
+        private async Task<List<Administrator>> ReturnAllAsync(DbDataReader reader)
         {
-            var posts = new List<User>();
+            var posts = new List<Administrator>();
             using (reader)
             {
                 while (await reader.ReadAsync())
                 {
-                    var post = new User(Db)
+                    var post = new Administrator(Db)
                     {
-                        iduser = reader.GetInt32(0),
-                        username = reader.GetString(1),
-                        password = reader.GetString(2),
-                        identity = reader.GetInt32(3),
-                        firstname = reader.GetString(4),
-                        lastname = reader.GetString(5)
+                        idadministrator = reader.GetInt32(0),
+                        category = reader.GetString(1),
                     };
                     posts.Add(post);
                 }
@@ -128,9 +120,9 @@ namespace university
         {
             cmd.Parameters.Add(new MySqlParameter
             {
-                ParameterName = "@iduser",
+                ParameterName = "@idadministrator",
                 DbType = DbType.Int32,
-                Value = iduser,
+                Value = idadministrator,
             });
         }
 
@@ -138,33 +130,9 @@ namespace university
         {
             cmd.Parameters.Add(new MySqlParameter
             {
-                ParameterName = "@username",
+                ParameterName = "@category",
                 DbType = DbType.String,
-                Value = username,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@password",
-                DbType = DbType.String,
-                Value = password,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@identity",
-                DbType = DbType.Int32,
-                Value = identity,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@firstname",
-                DbType = DbType.String,
-                Value = firstname,
-            });
-            cmd.Parameters.Add(new MySqlParameter
-            {
-                ParameterName = "@lastname",
-                DbType = DbType.String,
-                Value = lastname,
+                Value = category,
             });
         }
     }
